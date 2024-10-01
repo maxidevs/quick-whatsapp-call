@@ -19,7 +19,7 @@
     </hgroup>
 
     <article>
-      <form id="form" action="//wa.me/" method="get" target="_blank">
+      <form id="form" onsubmit="" method="get" target="_blank">
 
         <fieldset>
           <label for="INPUT_TEXT">Escribe un mensaje personalizado:</label>
@@ -41,8 +41,12 @@
           </div>
         </fieldset>
 
-        <input disabled id="submitter" type="submit">
-        <input type="reset">
+        <div class="button-container">
+          <span id="loader" class="loader" style="display: none"></span>
+          <input disabled id="submitter" type="submit">
+          <input type="reset">
+        </div>
+
 
       </form>
     </article>
