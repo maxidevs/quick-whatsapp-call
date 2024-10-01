@@ -5,6 +5,9 @@ body{
   min-height: 100vh;
   min-height: 100dvh;
 }
+article{
+  margin:0;
+}
 main.container{
   min-height: 100% !important;
   padding-inline: 1rem;

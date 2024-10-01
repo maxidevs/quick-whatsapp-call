@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="./favicon-32x32.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="./style.css">
@@ -41,12 +42,10 @@
           </div>
         </fieldset>
 
-        <div class="button-container">
-          <span id="loader" class="loader" style="display: none"></span>
+        <div class="button-container" aria-busy="false">
           <input disabled id="submitter" type="submit">
           <input type="reset">
         </div>
-
 
       </form>
     </article>

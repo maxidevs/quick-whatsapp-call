@@ -134,10 +134,12 @@ function newSubmit(e){
     const urlencodedText = encodeURIComponent(text);
     url += `&text=${urlencodedText}`;
   }
-  
-  const loader = document.getElementById('loader');
+
+  const submitArea = document.querySelector(".button-container");
+  //const loader = document.getElementById('loader');
+  submitArea.setAttribute('aria-busy', 'true');
   submitter.disabled= true;
-  loader.style.display = 'inline-block';
+  //loader.style.display = 'inline-block';
 
   setTimeout( ()=>{
     window.location.href = url;
