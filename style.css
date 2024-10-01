@@ -1,0 +1,22 @@
+body{
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+main.container{
+  min-height: 100% !important;
+  padding-inline: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+@media only screen and (max-width: 768px){
+  .input-group{
+    flex-direction: column;
+  }
+  #SELECT_COUNTRY_CODE{
+    max-width: initial !important;
+  }
+}
