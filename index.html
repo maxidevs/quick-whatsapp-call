@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="./favicon-32x32.png" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="./style.css">
@@ -11,28 +12,38 @@
 
 <body>
   <main class="container">
+    
     <hgroup>
       <h1>Quick WhatsCALL</h1>
       <p>Usa esta aplicacion para obtener un enlace directo a un número de whatsapp</p>
     </hgroup>
+
     <article>
       <form id="form" action="//wa.me/" method="get" target="_blank">
+
         <fieldset>
           <label for="INPUT_TEXT">Escribe un mensaje personalizado:</label>
           <input type="text" name="text" id="INPUT_TEXT" placeholder="Hola! Como estas? (opcional)">
         </fieldset>
+
         <fieldset>
           <label for="INPUT_PHONE">Numero de Teléfono</label>
           <div class="input-group" role="group">
-            <select name="country_code" id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
+            <!-- <select name="country_code" id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
               <option value="" hidden selected>Country</option>
-            </select>
+            </select> -->
+            <input list="SELECT_COUNTRY_CODE" name="country_code_input" id="SELECT_COUNTRY_CODE_INPUT" style="max-width: 200px;">
+            <datalist name="country_code" id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
+              <option hidden value=""></option>
+            </datalist>
             <input type="tel" onkeypress="preventStrings(this, event)" inputmode="tel" required autocomplete="mobile"
               name="phone" id="INPUT_PHONE" placeholder="XXX XXX XXXX">
           </div>
         </fieldset>
+
         <input disabled id="submitter" type="submit">
         <input type="reset">
+
       </form>
     </article>
   </main>

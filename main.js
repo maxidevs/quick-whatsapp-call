@@ -1,5 +1,16 @@
+const IPINFO_TOKEN = '67782fed0e2fc9';
+
 runSelectCountries();
 eventPhoneInput();
+
+function geoLocation(){
+  return new Promise( (resolve, reject) =>{
+    fetch(`https://ipinfo.io/json?token=${IPINFO_TOKEN}`)
+      .then( (resp)=> resp.json() )
+      .then( (data)=>resolve(data) )  //if Ok, returns object with data.ip and data.country, e.g. "CO"
+      .catch( (err)=> reject(err) )
+  } )
+}
 
 
 function getCountries() {
@@ -15,22 +26,34 @@ function getCountries() {
   });
 }
 
+/*
+"name": "Anguilla",
+"dial_code": "+1264",
+"code": "AI"
+*/
 async function runSelectCountries() {
-  const SELECT_COUNTRY = document.getElementById("SELECT_COUNTRY_CODE");
-  const setCountries = (countries) => {
+  const SELECT_COUNTRY_DATALIST = document.getElementById("SELECT_COUNTRY_CODE");
+  const SELECT_COUNTRY_INPUT = document.getElementById("SELECT_COUNTRY_CODE_INPUT");
+
+
+  const setCountries = (countries, currentCountry) => { //names the function to set given countries
     for (let country of countries) {
       const option = document.createElement("option");
-      const country_code = country.dial_code.replace("+", "");
-      option.value = country_code;
+      const country_dial_code = country.dial_code.replace("+", "");
+      option.value = country_dial_code;  //value of option element
       option.innerText = `(${country.dial_code}) - ${country.name}`;
-      if (country_code === '57') {
-        option.selected = true;
+
+      console.log(`country.code: ${country.code}. currentCountry: ${currentCountry} result: ${country.code === currentCountry}`)
+      if (country.code === currentCountry) {
+        SELECT_COUNTRY_INPUT.value = country.code;
       }
-      SELECT_COUNTRY.appendChild(option);
+      SELECT_COUNTRY_DATALIST.appendChild(option);
     }
   }
-  const country_codes = await getCountries();
-  setCountries(country_codes);
+  const country_codes = await getCountries(); //gets the country list
+  const currentAccess = await geoLocation();
+  console.log(currentAccess.country);
+  setCountries(country_codes, currentAccess.country);  //runs the set countries funct, now giving default country
   return;
 }
 
@@ -92,3 +115,6 @@ function eventPhoneInput() {
     }
   });
 }
+//Whatsapp API:
+//https://wa.me/?phone=XXXXXXXXXXXX&text=urlencodedtext
+//Example: https://wa.me/?phone=573017470755&text=I'm%20inquiring%20about%20the%20apartment%20listing`
