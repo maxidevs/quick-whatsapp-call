@@ -4,7 +4,7 @@ eventPhoneInput();
 
 function getCountries() {
   return new Promise((resolve, reject) => {
-    fetch("/data/CountryCodes.json")
+    fetch("./data/CountryCodes.json")
       .then(Response => Response.json())
       .then(data => {
         resolve(data);
