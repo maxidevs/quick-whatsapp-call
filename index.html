@@ -30,15 +30,13 @@
         <fieldset>
           <label for="INPUT_PHONE">Numero de Teléfono</label>
           <div class="input-group" role="group">
-            <!-- <select name="country_code" id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
-              <option value="" hidden selected>Country</option>
-            </select> -->
-            <input list="SELECT_COUNTRY_CODE" name="country_code_input" id="SELECT_COUNTRY_CODE_INPUT" style="max-width: 200px;">
+            <input list="SELECT_COUNTRY_CODE" name="country_code_input" 
+              id="SELECT_COUNTRY_CODE_INPUT" style="max-width: 200px;">
             <datalist name="country_code" id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
               <option hidden value=""></option>
             </datalist>
-            <input type="tel" onkeypress="preventStrings(this, event)" inputmode="tel" required autocomplete="mobile"
-              name="phone" id="INPUT_PHONE" placeholder="XXX XXX XXXX">
+            <input type="tel" onkeypress="preventStrings(this, event)" inputmode="tel" required
+              autocomplete="mobile" name="phone" id="INPUT_PHONE" placeholder="XXX XXX XXXX">
           </div>
         </fieldset>
 

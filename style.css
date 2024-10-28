@@ -29,7 +29,7 @@ main.container{
   .input-group{
     flex-direction: column;
   }
-  #SELECT_COUNTRY_CODE{
+  #SELECT_COUNTRY_CODE_INPUT{
     max-width: initial !important;
   }
 }
