@@ -1,0 +1,8 @@
+{
+  "name": "quick-whatsapp-call",
+  "version": "1.0.0",
+  "description": "Quick WhatsCALL is a simple web application that generates a direct link to a WhatsApp chat for a specified phone number. Users can select their country code, enter a valid phone number, and add an optional message. The app validates inputs, formats the WhatsApp link, and opens the chat in a new window, making it easy to start conversations instantly. Built with a minimalist design using Pico CSS for styling.",
+  "type": "module",
+  "author": "Max Jimenez",
+  "license": "MIT"
+}
