@@ -20,7 +20,7 @@
     </hgroup>
 
     <article>
-      <form id="form" onsubmit="" method="get" target="_blank">
+      <form id="form" onsubmit="" method="get" target="_blank" action="//wa.me/">
 
         <fieldset>
           <label for="INPUT_TEXT">Escribe un mensaje personalizado:</label>
@@ -31,8 +31,8 @@
           <label for="INPUT_PHONE">Numero de Teléfono</label>
           <div class="input-group" role="group">
             <input list="SELECT_COUNTRY_CODE" name="country_code_input" 
-              id="SELECT_COUNTRY_CODE_INPUT" style="max-width: 200px;">
-            <datalist name="country_code" id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
+              id="SELECT_COUNTRY_CODE_INPUT" style="max-width: 200px;" required>
+            <datalist id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
               <option hidden value=""></option>
             </datalist>
             <input type="tel" onkeypress="preventStrings(this, event)" inputmode="tel" required

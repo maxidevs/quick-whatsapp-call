@@ -109,7 +109,7 @@ function eventPhoneInput() {
     const clean_value = e.target.value.replace(/\D/g, '');
     let numbers = clean_value.slice(0, 10);     //var phone = numbers.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2 $3');
     e.target.value = numbers;
-    if (numbers.length == 10) {
+    if (numbers.length == 10 && select_country_code.value) {
       let action_url = form.getAttribute('action');
       let country_code = select_country_code.value;
       let full_number = String(country_code) + String(numbers);
