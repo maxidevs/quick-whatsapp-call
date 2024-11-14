@@ -86,7 +86,6 @@ function preventStrings(input, evt) {
 
 function eventPhoneInput() {
   const input_phone = document.getElementById('INPUT_PHONE');
-  const input_message = document.getElementById('INPUT_TEXT');
   const select_country_code = document.getElementById('SELECT_COUNTRY_CODE_INPUT');
   const submitter = document.getElementById('submitter');
   const form = document.getElementById('form');
@@ -109,7 +108,7 @@ function eventPhoneInput() {
     const clean_value = e.target.value.replace(/\D/g, '');
     let numbers = clean_value.slice(0, 10);     //var phone = numbers.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2 $3');
     e.target.value = numbers;
-    if (numbers.length == 10 && select_country_code.value) {
+    if (numbers.length === 10 && select_country_code.value) {
       let action_url = form.getAttribute('action');
       let country_code = select_country_code.value;
       let full_number = String(country_code) + String(numbers);
@@ -117,25 +116,24 @@ function eventPhoneInput() {
       action_url += full_number;
       form.setAttribute('action', action_url);
       submitter.disabled = false;
+      form.addEventListener( 'submit', newSubmit ); //proceeds to submission
     } else {
       restoreForm();
     }
   });
-  form.addEventListener( 'submit', newSubmit );
 }
 
-function newSubmit(e){
+function newSubmit(e){    //when finally submitted
   e.preventDefault();
   
   const country_codeInput = document.getElementById("SELECT_COUNTRY_CODE_INPUT");
   const numberInput = document.getElementById("INPUT_PHONE");
-  const textInput = document.getElementById("INPUT_TEXT");
+  const text = document.getElementById("INPUT_TEXT").value;
   const submitter = document.getElementById("submitter");
 
   const code = country_codeInput.value;
   const number = numberInput.value;
   let url = `https://wa.me/?phone=${code}${number}`;
-  const text = textInput.value;
 
   if (text!==""){
     const urlencodedText = encodeURIComponent(text);
@@ -148,5 +146,5 @@ function newSubmit(e){
 
   setTimeout( ()=>{
     window.location.href = url; //changes the current window to the full URL
-  }, 1500 );
+  }, 1000 );
 }
