@@ -1,11 +1,11 @@
-const IPINFO_TOKEN = '67782fed0e2fc9';
-
-runSelectCountries();
-eventPhoneInput();
-
 //Whatsapp API:
 //https://wa.me/?phone=XXXXXXXXXXXX&text=urlencodedtext
 //Example: https://wa.me/?phone=573017470755&text=I'm%20inquiring%20about%20the%20apartment%20listing`
+
+const IPINFO_TOKEN = '67782fed0e2fc9';
+
+runSelectCountries();
+mainController();
 
 function geoLocation(){
   return new Promise( (resolve, reject) =>{
@@ -84,11 +84,14 @@ function preventStrings(input, evt) {
   }
 }
 
-function eventPhoneInput() {
+function mainController() {
   const input_phone = document.getElementById('INPUT_PHONE');
-  const select_country_code = document.getElementById('SELECT_COUNTRY_CODE_INPUT');
+  const country_code = document.getElementById('SELECT_COUNTRY_CODE_INPUT');
+  const message = document.getElementById("INPUT_TEXT").value.trim()
   const submitter = document.getElementById('submitter');
   const form = document.getElementById('form');
+
+  form.addEventListener( 'submit', newSubmit ); //adds the listener
   const restoreForm = () => { //important since when 10d, number is added to actionURL
     form.setAttribute('action', '//wa.me/');
     submitter.disabled = true;
@@ -108,15 +111,12 @@ function eventPhoneInput() {
     const clean_value = e.target.value.replace(/\D/g, '');
     let numbers = clean_value.slice(0, 10);     //var phone = numbers.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2 $3');
     e.target.value = numbers;
-    if (numbers.length === 10 && select_country_code.value) {
-      let action_url = form.getAttribute('action');
-      let country_code = select_country_code.value;
-      let full_number = String(country_code) + String(numbers);
-      //add country code and phone number
-      action_url += full_number;
-      form.setAttribute('action', action_url);
+    if (numbers.length === 10 && country_code.value) {
+      let full_number = String(country_code.value) + String(numbers);
       submitter.disabled = false;
-      form.addEventListener( 'submit', newSubmit ); //proceeds to submission
+      const baseURL = `https://wa.me/${full_number}`;
+      const action_url = message ? `${baseURL}?text=${encodeURIComponent(message)}` : baseURL;
+      form.setAttribute('action', action_url);
     } else {
       restoreForm();
     }
@@ -125,20 +125,6 @@ function eventPhoneInput() {
 
 function newSubmit(e){    //when finally submitted
   e.preventDefault();
-  
-  const country_codeInput = document.getElementById("SELECT_COUNTRY_CODE_INPUT");
-  const numberInput = document.getElementById("INPUT_PHONE");
-  const text = document.getElementById("INPUT_TEXT").value;
-  const submitter = document.getElementById("submitter");
-
-  const code = country_codeInput.value;
-  const number = numberInput.value;
-  let url = `https://wa.me/?phone=${code}${number}`;
-
-  if (text!==""){
-    const urlencodedText = encodeURIComponent(text);
-    url += `&text=${urlencodedText}`;
-  }
 
   const submitArea = document.querySelector(".button-container");
   submitArea.setAttribute('aria-busy', 'true'); //custom property aria-busy
@@ -147,4 +133,6 @@ function newSubmit(e){    //when finally submitted
   setTimeout( ()=>{
     window.location.href = url; //changes the current window to the full URL
   }, 1000 );
+  const url = form.getAttribute('action');
+  window.open(url);
 }
