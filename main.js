@@ -87,7 +87,6 @@ function preventStrings(input, evt) {
 function mainController() {
   const input_phone = document.getElementById('INPUT_PHONE');
   const country_code = document.getElementById('SELECT_COUNTRY_CODE_INPUT');
-  const message = document.getElementById("INPUT_TEXT").value.trim()
   const submitter = document.getElementById('submitter');
   const form = document.getElementById('form');
 
@@ -112,6 +111,7 @@ function mainController() {
     let numbers = clean_value.slice(0, 10);     //var phone = numbers.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2 $3');
     e.target.value = numbers;
     if (numbers.length === 10 && country_code.value) {
+      const message = document.getElementById("INPUT_TEXT").value.trim()
       let full_number = String(country_code.value) + String(numbers);
       submitter.disabled = false;
       const baseURL = `https://wa.me/${full_number}`;
