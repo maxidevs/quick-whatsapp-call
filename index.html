@@ -30,11 +30,11 @@
         <fieldset>
           <label for="INPUT_PHONE">Numero de Teléfono</label>
           <div class="input-group" role="group">
-            <input list="SELECT_COUNTRY_CODE" name="country_code_input" 
+            <input list="SELECT_COUNTRY_CODE" name="country_code_input" onchange="handleInput(this, event)"
               id="SELECT_COUNTRY_CODE_INPUT" style="max-width: 200px;" required>
-            <datalist id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
-              <option hidden value=""></option>
-            </datalist>
+              <datalist id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
+                <option hidden value=""></option>
+              </datalist>
             <input type="tel" onkeypress="preventStrings(this, event)" oninput="handleInput(this, event)" inputmode="tel" required
               autocomplete="mobile" name="phone" id="INPUT_PHONE" placeholder="XXX XXX XXXX">
           </div>
