@@ -1,6 +1,36 @@
-runSelectCountries();
-eventPhoneInput();
+//Whatsapp API:
+//https://wa.me/?phone=XXXXXXXXXXXX&text=urlencodedtext
+//Example: https://wa.me/?phone=573017470755&text=I'm%20inquiring%20about%20the%20apartment%20listing`
 
+const IPINFO_TOKEN = '67782fed0e2fc9';
+
+const form = document.getElementById('form');
+const submitter = document.getElementById('submitter');
+const country_code = document.getElementById('SELECT_COUNTRY_CODE_INPUT');
+form.addEventListener( 'submit', newSubmit ); //adds the listener
+const input_phone = document.getElementById('INPUT_PHONE');
+
+runSelectCountries();
+
+function geoLocation(){
+  return new Promise( (resolve, reject) =>{
+    fetch(`https://ipinfo.io/json?token=${IPINFO_TOKEN}`)
+      .then( (resp)=> resp.json() )
+      .then( (data)=>resolve(data) )  //if Ok, returns object with data.ip and data.country, e.g. "CO"
+      .catch( (err)=> reject(err) )
+  } )
+}
+
+async function geoLocation2(){
+  try {
+    const response = await fetch(`https://ipinfo.io/json?token=${IPINFO_TOKEN}`);
+    const data = await response.json();
+    return data;
+  } catch ( error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 function getCountries() {
   return new Promise((resolve, reject) => {
@@ -15,80 +45,103 @@ function getCountries() {
   });
 }
 
+async function getCountries2(){
+  try {
+    const response = await fetch("./data/CountryCodes.json");
+    const data = response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 async function runSelectCountries() {
-  const SELECT_COUNTRY = document.getElementById("SELECT_COUNTRY_CODE");
-  const setCountries = (countries) => {
+  const SELECT_COUNTRY_DATALIST = document.getElementById("SELECT_COUNTRY_CODE");
+  const SELECT_COUNTRY_INPUT = document.getElementById("SELECT_COUNTRY_CODE_INPUT");
+
+  const fillCountryList = (countries, currentCountry) => { //names the function to set given countries
     for (let country of countries) {
       const option = document.createElement("option");
-      const country_code = country.dial_code.replace("+", "");
-      option.value = country_code;
+      const country_dial_code = country.dial_code.replace("+", "");
+      option.value = country_dial_code;  //value of option element
       option.innerText = `(${country.dial_code}) - ${country.name}`;
-      if (country_code === '57') {
-        option.selected = true;
+
+      if (country.code === currentCountry) {
+        SELECT_COUNTRY_INPUT.value = country.dial_code.replace("+", "");  //whatsapp APi does not admit +
       }
-      SELECT_COUNTRY.appendChild(option);
+      SELECT_COUNTRY_DATALIST.appendChild(option);
     }
   }
-  const country_codes = await getCountries();
-  setCountries(country_codes);
+
+  const country_codes = await getCountries2(); //gets the country list
+  const currentAccess = await geoLocation2();
+  fillCountryList(country_codes, currentAccess.country);  //runs the set countries funct, now giving default country
   return;
 }
 
-function preventStrings(input, evt) {
-  //If enter
-  if (evt.which == 13) {
+function preventStrings(input, e) { //this listens to the keypress event.
+  //fires before character is added. Cancellable, repeated if held. Data focused on key pressed 
+  if (e.which == 13) {  //enter
     return;
   }
-  if (evt.which < 48 || evt.which > 57) {
-    evt.preventDefault();
+  if (e.which < 48 || e.which > 57) {
+    e.preventDefault();  //non-digits
+  }
+  if (input.value.length>=10){
+    e.preventDefault();  //after 10 chars (digits)
   }
 }
-function eventPhoneInput() {
-  const input_phone = document.getElementById('INPUT_PHONE');
-  const input_message = document.getElementById('INPUT_TEXT');
-  const select_country_code = document.getElementById('SELECT_COUNTRY_CODE');
-  const submitter = document.getElementById('submitter');
-  const form = document.getElementById('form');
-  const restoreForm = () => {
+
+function handleInput(input, e) {  //this listens to the input event. More general. reads more than keys
+  //Fires after input is updated, can access to the updated input value. Allows real-time formatting
+  let is_deleting="";
+  input.id== "INPUT_PHONE"? is_deleting = e.inputType == "deleteContentBackward" || e.inputType == "deleteContentForward" 
+  : is_deleting=false;
+  console.log(is_deleting);
+  if (is_deleting){
+    //important since everytime 10d, number is added to actionURL
     form.setAttribute('action', '//wa.me/');
     submitter.disabled = true;
-  }
-  const parseTextParam = () => {
-    let text = input_message.value;
-    if (text.length > 0) {
-      text = encodeURIComponent(text);
-      //set value 
-      input_message.value = text;
+    if (input_phone.value.length>=10) {
+      input_phone.value = input_phone.value.replace(/\D/g, '');
+      input_phone.value = input_phone.value.slice(-9);
     }
     return;
   }
-  //set focus on input
-  input_phone.focus();
-  /* Event Phone Input */
-  input_phone.addEventListener('input', (e) => {
-    /* Detect delete */
-    const is_deleting = e.inputType == "deleteContentBackward" || e.inputType == "deleteContentForward";
-    const is_pasting = e.inputType == "insertFromPaste";
-    const is_autocompleting = e.inputType == null;
-    if (is_deleting) {
-      restoreForm();
-      return;
-    }
-    /* Get the 10 first digits */
-    const clean_value = e.target.value.replace(/\D/g, '');
-    let numbers = clean_value.slice(0, 10);
-    //var phone = numbers.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2 $3');
-    e.target.value = numbers;
-    if (numbers.length == 10) {
-      let action_url = form.getAttribute('action');
-      let country_code = select_country_code.value;
-      let full_number = String(country_code) + String(numbers);
-      //add country code and phone number
-      action_url = action_url + full_number;
-      form.setAttribute('action', action_url);
-      submitter.disabled = false;
-    } else {
-      restoreForm();
-    }
-  });
+  if (input.value.length >= 10 && country_code.value) {
+    submitter.disabled = false;  //enabling button (after 10th char is updated)
+  } 
+  
+  const clean_value = input_phone.value.replace(/\D/g, ''); //replaces all non-digits for ""
+  let numbers = clean_value.slice(-10);  // Get the last 10 digits
+  console.log(`Input ${input.id} length: ${input.value.length}. numbers: ${numbers}`)
+  let formatted_phone = numbers.replace(/(\d{3})(\d{3})(\d{4})/, `(+${country_code.value}) $1 $2 $3`);
+  input_phone.value = formatted_phone;    //updates the status of the input
+  if (numbers.length >= 10 && country_code.value) {
+    const message = document.getElementById("INPUT_TEXT").value.trim();
+    let full_number = String(country_code.value) + String(numbers);
+    const baseURL = `https://wa.me/${full_number}`;
+    const action_url = message ? `${baseURL}?text=${encodeURIComponent(message)}` : baseURL;
+    console.log("URL is being updated to " + action_url);
+    form.setAttribute('action', action_url);
+  } else {
+    form.setAttribute('action', '//wa.me/');
+    submitter.disabled = true;
+    return;
+  }
+}
+
+function newSubmit(e){    //when finally submitted
+  e.preventDefault();
+
+  const submitArea = document.querySelector(".button-container");
+  submitArea.setAttribute('aria-busy', 'true'); //custom property aria-busy
+  submitter.disabled= true;
+
+  setTimeout( ()=>{
+    window.location.href = url; //changes the current window to the full URL
+  }, 1000 );
+  const url = form.getAttribute('action');
+  window.open(url);
 }
