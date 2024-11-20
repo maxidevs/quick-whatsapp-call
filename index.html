@@ -24,7 +24,7 @@
 
         <fieldset>
           <label for="INPUT_TEXT">Escribe un mensaje personalizado:</label>
-          <input type="text" name="text" id="INPUT_TEXT" placeholder="Hola! Como estas? (opcional)">
+          <input type="text" name="text" id="INPUT_TEXT" oninput="handleInput(this, event)" placeholder="Hola! Como estas? (opcional)">
         </fieldset>
 
         <fieldset>
@@ -35,7 +35,7 @@
             <datalist id="SELECT_COUNTRY_CODE" style="max-width: 200px;">
               <option hidden value=""></option>
             </datalist>
-            <input type="tel" onkeypress="preventStrings(this, event)" inputmode="tel" required
+            <input type="tel" onkeypress="preventStrings(this, event)" oninput="handleInput(this, event)" inputmode="tel" required
               autocomplete="mobile" name="phone" id="INPUT_PHONE" placeholder="XXX XXX XXXX">
           </div>
         </fieldset>
